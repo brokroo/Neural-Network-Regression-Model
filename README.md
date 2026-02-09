@@ -44,8 +44,8 @@ The trained model is evaluated using test data and test loss is calculated.
 
 ## PROGRAM
 
-### Name: Ramitha chowdary S
-### Register Number: 212224240130
+### Name: SANJITH R
+### Register Number: 212223230191
 
 ```python
 import torch
