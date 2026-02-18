@@ -1,52 +1,62 @@
 # Developing a Neural Network Regression Model
-
+## NAME:SANJITH R
+## REG NO:212223230191
 ## AIM
 
-To develop a Neural Network–based regression model for predicting the spending score of customers using the given dataset.
+To develop a neural network regression model for the given dataset.
 
 ## THEORY
-```
-Problem Statement Explanation:
 
-An automobile company wants to understand customer behavior based on demographic features such as Age.
-The Spending Score represents how actively a customer spends money. Predicting this score helps the company:
--Analyze customer purchasing behavior
--Design personalized offers
--Improve marketing strategies
-Since the output (Spending Score) is a continuous numerical value, the problem is treated as a regression problem.
-A Neural Network Regression Model is used to learn the relationship between age and spending score.
-```
+The model is a:
+
+Feedforward Artificial Neural Network (ANN)
+Also called a Multilayer Perceptron (MLP).
+
+It contains:
+
+Input layer
+
+Two hidden layers
+
+Output layer
+
 ## Neural Network Model
-<img width="1134" height="647" alt="418446260-84093ee0-48a5-4bd2-b78d-5d8ee258d189" src="https://github.com/user-attachments/assets/f9a07d0f-c01e-4a3b-9ac3-bd8751e0f6cc" />
+
+<img width="979" height="681" alt="image" src="https://github.com/user-attachments/assets/e23e61de-4635-4b85-bc9b-823efe485612" />
+
+
 
 ## DESIGN STEPS
 
-### STEP 1: Loading the Dataset
-The customer dataset is loaded using the Pandas library.
+### STEP 1:
 
-### STEP 2: Splitting the Dataset
-The dataset is split into training data and testing data to evaluate model performance.
+Loading the dataset
 
-### STEP 3: Data Scaling
-MinMaxScaler is used to normalize the input values between 0 and 1.
+### STEP 2:
 
-### STEP 4: Building the Neural Network Model
-A feedforward neural network is created using PyTorch with linear layers and ReLU activation.
+Split the dataset into training and testing
 
-### STEP 5: Training the Model
-The model is trained using Mean Squared Error loss and RMSprop optimizer.
+### STEP 3:
 
-### STEP 6: Plotting the Performance
-Training loss is plotted against epochs to visualize learning behavior.
+Create MinMaxScalar objects ,fit the model and transform the data.
 
-### STEP 7: Model Evaluation
-The trained model is evaluated using test data and test loss is calculated.
+### STEP 4:
+
+Build the Neural Network Model and compile the model.
+
+### STEP 5:
+
+Train the model with the training data.
+
+### STEP 6:
+
+Plot the performance plot
+
+### STEP 7:
+
+Evaluate the model with the testing data.
 
 ## PROGRAM
-
-### Name: SANJITH R
-### Register Number: 212223230191
-
 ```python
 import torch
 import torch.nn as nn
@@ -57,16 +67,15 @@ from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 
 # Load Dataset
-dataset1 = pd.read_csv('customers.csv')
-
-X = dataset1[['Age']].values
-y = dataset1[['Spending_Score']].values
+dataset1 = pd.read_csv('/content/Dhata.csv')
+print(dataset1.head(10))
+X = dataset1[['Input']].values
+y = dataset1[['Output']].values
 
 # Train-Test Split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.33, random_state=33
 )
-
 # Scaling
 scaler = MinMaxScaler()
 X_train = scaler.fit_transform(X_train)
@@ -77,7 +86,6 @@ X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
 y_train_tensor = torch.tensor(y_train, dtype=torch.float32)
 X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
 y_test_tensor = torch.tensor(y_test, dtype=torch.float32)
-
 # Neural Network Model
 class NeuralNet(nn.Module):
     def __init__(self):
@@ -95,59 +103,82 @@ class NeuralNet(nn.Module):
         return x
 
 # Initialize Model, Loss and Optimizer
-ai_brain = NeuralNet()
+ai_dhivya = NeuralNet()
 criterion = nn.MSELoss()
-optimizer = optim.RMSprop(ai_brain.parameters(), lr=0.001)
+optimizer = optim.RMSprop(ai_dhivya.parameters(), lr=0.001)
 
 # Training Function
-def train_model(ai_brain, X_train, y_train, criterion, optimizer, epochs=2000):
+def train_model(ai_dhivya, X_train, y_train, criterion, optimizer, epochs=2000):
     for epoch in range(epochs):
         optimizer.zero_grad()
-        loss = criterion(ai_brain(X_train), y_train)
+        loss = criterion(ai_dhivya(X_train), y_train)
         loss.backward()
         optimizer.step()
-        ai_brain.history['loss'].append(loss.item())
+        ai_dhivya.history['loss'].append(loss.item())
 
         if epoch % 200 == 0:
             print(f"Epoch [{epoch}/{epochs}], Loss: {loss.item():.6f}")
 
 # Train the Model
-train_model(ai_brain, X_train_tensor, y_train_tensor, criterion, optimizer)
+train_model(ai_dhivya, X_train_tensor, y_train_tensor, criterion, optimizer)
 
 # Test Evaluation
 with torch.no_grad():
-    test_loss = criterion(ai_brain(X_test_tensor), y_test_tensor)
+    test_loss = criterion(ai_dhivya(X_test_tensor), y_test_tensor)
     print(f"Test Loss: {test_loss.item():.6f}")
-
+print("Name:Dhivya Dharshini B")
+print("Reg No :212223240031")
 # Plot Loss
-loss_df = pd.DataFrame(ai_brain.history)
+loss_df = pd.DataFrame(ai_dhivya.history)
 loss_df.plot()
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
 plt.title("Training Loss vs Epochs")
 plt.show()
 
-# New Sample Prediction
-X_new = torch.tensor([[9]], dtype=torch.float32)
+# Take user input
+user_input = float(input("Enter Input Value: "))
+
+# Convert to tensor
+X_new = torch.tensor([[user_input]], dtype=torch.float32)
+
+# Scale input
 X_new_scaled = torch.tensor(scaler.transform(X_new), dtype=torch.float32)
 
-prediction = ai_brain(X_new_scaled).item()
-print(f"Predicted Spending Score: {prediction}")
+# Predict
+with torch.no_grad():
+    prediction = ai_dhivya(X_new_scaled).item()
+
+print(f"Predicted Output: {prediction}")
+
+
 ```
 ## Dataset Information
 
-<img width="954" height="669" alt="image" src="https://github.com/user-attachments/assets/1cb1b3fe-aa46-4899-b50b-3572dadcd3e2" />
+<img width="214" height="252" alt="image" src="https://github.com/user-attachments/assets/9ea7f318-c782-4837-9716-34ce6503e6d1" />
+
 
 ## OUTPUT
 
+
+
+### Epoch Loss
+
+<img width="363" height="239" alt="image" src="https://github.com/user-attachments/assets/df277346-74e0-4965-a155-9600bde953c4" />
+
 ### Training Loss Vs Iteration Plot
-<img width="601" height="595" alt="image" src="https://github.com/user-attachments/assets/0e379cd1-b1bf-47f4-9afe-14095a54caba" />
+
+
+<img width="762" height="620" alt="image" src="https://github.com/user-attachments/assets/15677c83-4e09-41b0-8d66-36487e7371e6" />
+
+
 
 ### New Sample Data Prediction
-<img width="613" height="243" alt="image" src="https://github.com/user-attachments/assets/49251c6c-7e0c-4070-8c12-a58ff673ab3e" />
 
-<img width="715" height="97" alt="image" src="https://github.com/user-attachments/assets/907fac51-67e8-45f2-a8ed-c99c174fd495" />
+
+<img width="365" height="44" alt="image" src="https://github.com/user-attachments/assets/39944c16-093d-4479-b048-f8a24a5c0fc0" />
+
 
 ## RESULT
+Thus a Neural Network Regression Model is developed sucessfully.
 
-The neural network regression model was successfully trained and evaluated. The model demonstrated strong predictive performance on unseen data, with a low error rate.
