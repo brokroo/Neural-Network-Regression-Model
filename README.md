@@ -66,27 +66,32 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 
-# Load Dataset
+# --- 1. Load Dataset ---
+# Ensure 'Dhata.csv' is available in your environment path
 dataset1 = pd.read_csv('/content/Dhata.csv')
+print("Dataset Preview:")
 print(dataset1.head(10))
+
 X = dataset1[['Input']].values
 y = dataset1[['Output']].values
 
-# Train-Test Split
+# --- 2. Train-Test Split ---
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.33, random_state=33
 )
-# Scaling
+
+# --- 3. Scaling ---
 scaler = MinMaxScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-# Convert to Tensors
+# --- 4. Convert to Tensors ---
 X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
 y_train_tensor = torch.tensor(y_train, dtype=torch.float32)
 X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
 y_test_tensor = torch.tensor(y_test, dtype=torch.float32)
-# Neural Network Model
+
+# --- 5. Neural Network Model Definition ---
 class NeuralNet(nn.Module):
     def __init__(self):
         super().__init__()
@@ -102,55 +107,61 @@ class NeuralNet(nn.Module):
         x = self.fc3(x)
         return x
 
-# Initialize Model, Loss and Optimizer
-ai_dhivya = NeuralNet()
+# --- 6. Initialize Model, Loss and Optimizer ---
+ai_sanjith = NeuralNet()
 criterion = nn.MSELoss()
-optimizer = optim.RMSprop(ai_dhivya.parameters(), lr=0.001)
+optimizer = optim.RMSprop(ai_sanjith.parameters(), lr=0.001)
 
-# Training Function
-def train_model(ai_dhivya, X_train, y_train, criterion, optimizer, epochs=2000):
+# --- 7. Training Function ---
+def train_model(model, X_train, y_train, criterion, optimizer, epochs=2000):
     for epoch in range(epochs):
         optimizer.zero_grad()
-        loss = criterion(ai_dhivya(X_train), y_train)
+        output = model(X_train)
+        loss = criterion(output, y_train)
         loss.backward()
         optimizer.step()
-        ai_dhivya.history['loss'].append(loss.item())
+        
+        model.history['loss'].append(loss.item())
 
         if epoch % 200 == 0:
             print(f"Epoch [{epoch}/{epochs}], Loss: {loss.item():.6f}")
 
-# Train the Model
-train_model(ai_dhivya, X_train_tensor, y_train_tensor, criterion, optimizer)
+# --- 8. Train the Model ---
+train_model(ai_sanjith, X_train_tensor, y_train_tensor, criterion, optimizer)
 
-# Test Evaluation
+# --- 9. Test Evaluation ---
 with torch.no_grad():
-    test_loss = criterion(ai_dhivya(X_test_tensor), y_test_tensor)
-    print(f"Test Loss: {test_loss.item():.6f}")
-print("Name:Dhivya Dharshini B")
-print("Reg No :212223240031")
-# Plot Loss
-loss_df = pd.DataFrame(ai_dhivya.history)
+    test_loss = criterion(ai_sanjith(X_test_tensor), y_test_tensor)
+    print(f"\nTest Loss: {test_loss.item():.6f}")
+
+# Updated Identification
+print("\n" + "="*30)
+print("Name: SANJITH R")
+print("Reg No: 212223230191")
+print("="*30 + "\n")
+
+# --- 10. Plot Loss ---
+loss_df = pd.DataFrame(ai_sanjith.history)
 loss_df.plot()
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
-plt.title("Training Loss vs Epochs")
+plt.title("Training Loss vs Epochs (Model: ai_sanjith)")
 plt.show()
 
-# Take user input
-user_input = float(input("Enter Input Value: "))
+# --- 11. Prediction on User Input ---
+try:
+    user_input = float(input("Enter Input Value: "))
+    
+    # Scale and Predict
+    X_new = torch.tensor([[user_input]], dtype=torch.float32)
+    X_new_scaled = torch.tensor(scaler.transform(X_new), dtype=torch.float32)
 
-# Convert to tensor
-X_new = torch.tensor([[user_input]], dtype=torch.float32)
+    with torch.no_grad():
+        prediction = ai_sanjith(X_new_scaled).item()
 
-# Scale input
-X_new_scaled = torch.tensor(scaler.transform(X_new), dtype=torch.float32)
-
-# Predict
-with torch.no_grad():
-    prediction = ai_dhivya(X_new_scaled).item()
-
-print(f"Predicted Output: {prediction}")
-
+    print(f"Predicted Output: {prediction:.6f}")
+except ValueError:
+    print("Invalid input. Please enter a numerical value.")
 
 ```
 ## Dataset Information
