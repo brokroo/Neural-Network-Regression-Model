@@ -180,7 +180,7 @@ except ValueError:
 ### Training Loss Vs Iteration Plot
 
 
-<img width="762" height="620" alt="image" src="https://github.com/user-attachments/assets/15677c83-4e09-41b0-8d66-36487e7371e6" />
+<img width="1024" height="825" alt="image" src="https://github.com/user-attachments/assets/3a0c8c37-7e41-453a-b61f-b007e3d99776" />
 
 
 
